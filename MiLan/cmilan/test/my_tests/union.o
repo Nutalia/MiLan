@@ -1,0 +1,26 @@
+BEGIN
+	ARRAY arr1[7];
+	ARRAY arr2[5];
+	ARRAY arr3[12];
+
+	arr1[0] := 1;
+	arr1[1] := 8;
+	arr1[2] := 5;
+	arr1[3] := -5;
+	arr1[4] := 10;
+	arr1[5] := 2;
+	arr1[6] := 1;
+
+	arr2[0] := 8;
+	arr2[1] := 3;
+	arr2[2] := 10;
+	arr2[3] := 3;
+	arr2[4] := 9;
+
+	arr3:= [arr1 | arr2]; /* {1,8,5,-5,10,2,3,9} */
+	i:=0;
+	WHILE i < 12 DO
+		WRITE(arr3[i]);
+		i:=i+1;
+	OD
+END

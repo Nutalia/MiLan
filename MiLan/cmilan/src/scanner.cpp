@@ -21,12 +21,17 @@ static const char * tokenNames_[] = {
 	"'OD'",
 	"'WRITE'",
 	"'READ'",
+	"'DELETE'",
+	"'ARRAY'",
 	"':='",
 	"'+' or '-'",
 	"'*' or '/'",
+	"'|' or '&'",
 	"comparison operator",
 	"'('",
 	"')'",
+	"'['",
+	"']'",
 	"';'",
 };
 
@@ -196,9 +201,28 @@ void Scanner::nextToken()
 				nextChar();
 				break;
 
+			case '|':
+				token_ = T_ARROP;
+				arithmeticValue_ = A_PLUS;
+				nextChar();
+				break;
+
 			case '*':
 				token_ = T_MULOP;
 				arithmeticValue_ = A_MULTIPLY;
+				nextChar();
+				break;
+			case '&':
+				token_ = T_ARROP;
+				arithmeticValue_ = A_MULTIPLY;
+				nextChar();
+				break;
+			case '[':
+				token_ = T_LQPAREN;
+				nextChar();
+				break;
+			case ']':
+				token_ = T_RQPAREN;
 				nextChar();
 				break;
 			//Иначе лексема ошибки.

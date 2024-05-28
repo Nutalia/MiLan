@@ -40,7 +40,7 @@ public:
 	// Конструктор создает экземпляры лексического анализатора и генератора.
 
 	Parser(const string& fileName, istream& input)
-		: output_(cout), error_(false), recovered_(true), lastVar_(0)
+		: output_(cout), error_(false), recovered_(true), lastVar_(3), reserveAddress_(0)
 	{
 		scanner_ = new Scanner(fileName, input);
 		codegen_ = new CodeGen(output_);
@@ -65,6 +65,13 @@ private:
 	void term(); //разбор слагаемого.
 	void factor(); //разбор множителя.
 	void relation(); //разбор условия.
+	void arrExpression();//разбор поэлементных операций над массивами
+	void arrTerm();//разбор слагаемого массивов
+	void arrFactor(); //разбор произведения массивов
+	void clear(); //очищает использованную память
+	void copyToDest(int address, int size); //копирует массив (если размер позволяет), полученный при объединении или пересечении в конечный массив
+	void orCode(int arrAddress, int sizeAddress); //формирование кода для операции объединения
+	void andCode(int arrAddress1, int sizeAddress1, int arrAddress2, int sizeAddress2); //формирование кода для операции пересечения
 
 	// Сравнение текущей лексемы с образцом. Текущая позиция в потоке лексем не изменяется.
 	bool see(Token t)
@@ -102,10 +109,19 @@ private:
 	
 	void mustBe(Token t); //проверяем, совпадает ли данная лексема с образцом. Если да, то лексема изымается из потока.
 	//Иначе создаем сообщение об ошибке и пробуем восстановиться
-	void recover(Token t); //восстановление после ошибки: идем по коду до тех пор, 
+	void recover(Token t, bool goToNext=true); //восстановление после ошибки: идем по коду до тех пор, 
 	//пока не встретим эту лексему или лексему конца файла.
 	int findOrAddVariable(const string&); //функция пробегает по variables_. 
 	//Если находит нужную переменную - возвращает ее номер, иначе добавляет ее в массив, увеличивает lastVar и возвращает его.
+	int findVariable(const string&); //функция пробегает по variables_. 
+	//Если находит нужную переменную - возвращает ее номер, иначе возвращает -1.
+	int findArray(const string&); //функция пробегает по arrays_.
+	//Если находит нужный массив - возвращает его номер, иначе возвращает -1
+	int addArray(const string&, int offset); //функция пробегает по arrays_.
+	//Если находит нужный массив - возвращает -1 (ошибка), иначе добавляет его в массив, увеличивает lastVar на offset и возвращает старое значение lastVar.
+	//Также идет добавление в arraySizes_
+	int findSize(const string&); //функция пробегает по arraySizes_. 
+	//Если находит нужный размер - возвращает его номер, иначе возвращает -1
 
 	Scanner* scanner_; //лексический анализатор для конструктора
 	CodeGen* codegen_; //указатель на виртуальную машину
@@ -113,7 +129,10 @@ private:
 	bool error_; //флаг ошибки. Используется чтобы определить, выводим ли список команд после разбора или нет
 	bool recovered_; //не используется
 	VarTable variables_; //массив переменных, найденных в программе
+	VarTable arrays_; //массив массивов, найденных в программе
+	VarTable arraySizes_; //массив размеров массивов, найденных в программе
 	int lastVar_; //номер последней записанной переменной
+	int reserveAddress_; //номер зарезервированного адреса, нужно для массивов
 };
 
 #endif

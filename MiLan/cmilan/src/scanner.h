@@ -23,12 +23,17 @@ enum Token {
 	T_OD,			// Ключевое слово "od"
 	T_WRITE,		// Ключевое слово "write"
 	T_READ,			// Ключевое слово "read"
+	T_DELETE,		// Ключевое слово "delete"
+	T_ARRAY,        // Ключевое слово "array"
 	T_ASSIGN,		// Оператор ":="
 	T_ADDOP,		// Сводная лексема для "+" и "-" (операция типа сложения)
 	T_MULOP,		// Сводная лексема для "*" и "/" (операция типа умножения)
+	T_ARROP,		// Лексема для | (операция объединения) и & (операция пересечения)
 	T_CMP,			// Сводная лексема для операторов отношения
 	T_LPAREN,		// Открывающая скобка
 	T_RPAREN,		// Закрывающая скобка
+	T_LQPAREN,      // Открывающая квадратная скобка
+	T_RQPAREN,      // Закрывающая квадратная скобка
 	T_SEMICOLON		// ";"
 };
 
@@ -76,6 +81,8 @@ public:
 		keywords_["od"] = T_OD;
 		keywords_["write"] = T_WRITE;
 		keywords_["read"] = T_READ;
+		keywords_["delete"] = T_DELETE;
+		keywords_["array"] = T_ARRAY;
 
 		nextChar();
 	}

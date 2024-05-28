@@ -1,0 +1,14 @@
+BEGIN
+	ARRAY arr[5];
+	arr[0] := 1;
+	i := 1;
+	WHILE i < 5 DO
+		arr[i] := arr[i-1] + 1;
+		i := i + 1;
+	OD;
+	i := 0;
+	WHILE i < 5 DO
+		WRITE(arr[i]);
+		i := i + 1;
+	OD
+END

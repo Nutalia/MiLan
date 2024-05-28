@@ -1,0 +1,17 @@
+BEGIN
+	ARRAY arr[10];
+	
+	i:=0;
+	WHILE i < 10 DO
+		arr[i] := i;
+		i:=i+1;
+	OD;
+	
+	DELETE(arr);
+
+	i:=0;
+	WHILE i < 10 DO
+		arr[i] := i;
+		i:=i+1;
+	OD /* на последней итерации будет ошибка */
+END
